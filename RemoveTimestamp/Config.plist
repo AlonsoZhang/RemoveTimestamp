@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Regex</key>
+	<array>
+		<dict>
+			<key>find</key>
+			<string>0</string>
+			<key>ex</key>
+			<string>2017/09/13 23:15:17.709972:</string>
+			<key>regex</key>
+			<string>\d{4}/\d{1,2}/\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{6}:</string>
+		</dict>
+		<dict>
+			<key>find</key>
+			<string>0</string>
+			<key>ex</key>
+			<string>2017-09-13 23:15:39.762 GMT+8 [1234]: </string>
+			<key>regex</key>
+			<string>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{3} GMT\+8 \[\d{4}\]:</string>
+		</dict>
+		<dict>
+			<key>find</key>
+			<string>0</string>
+			<key>ex</key>
+			<string>2017-09-13 23:15:39.762 GMT+8 [12345]: </string>
+			<key>regex</key>
+			<string>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{3} GMT\+8 \[\d{5}\]:</string>
+		</dict>
+		<dict>
+			<key>find</key>
+			<string>0</string>
+			<key>ex</key>
+			<string>[23:16:26.8868]</string>
+			<key>regex</key>
+			<string>\[\d{1,2}:\d{1,2}:\d{1,2}\.\d{4}\]</string>
+		</dict>
+		<dict>
+			<key>find</key>
+			<string>0</string>
+			<key>ex</key>
+			<string>&lt;DFU Device 0x7f959ac35f00&gt;</string>
+			<key>regex</key>
+			<string>&lt;DFU Device .*?&gt;</string>
+		</dict>
+	</array>
+</dict>
+</plist>
