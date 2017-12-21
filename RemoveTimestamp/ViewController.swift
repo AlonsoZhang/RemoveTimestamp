@@ -14,16 +14,15 @@ class ViewController: NSViewController {
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet var detailInfo: NSTextView!
     @IBOutlet weak var errorInfo: NSTextField!
+    @IBOutlet weak var txtBtn: NSButton!
+    @IBOutlet weak var logBtn: NSButton!
+    @IBOutlet weak var csvBtn: NSButton!
+    @IBOutlet weak var plistBtn: NSButton!
     
     var file = ""
     var ConfigPlist = [String: Any]()
-    
-    var outputlogstr = String()
-    var finallogname = ""
     var loglog = ""
-    
     var datas = [NSMutableDictionary]()
-    var types = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +30,6 @@ class ViewController: NSViewController {
         file = Bundle.main.path(forResource:"Config", ofType: "plist")!
         ConfigPlist = NSDictionary(contentsOfFile: file)! as! [String : Any]
         self.datas = ConfigPlist["Regex"] as! [NSMutableDictionary]
-        types = [".txt",".plist",".csv",".log"]
         self.tableView.reloadData()
     }
     
@@ -70,7 +68,7 @@ class ViewController: NSViewController {
     
     @IBAction func Export(_ sender: NSButton) {
         errorInfo.stringValue = ""
-        outputlogstr = String()
+        self.detailInfo.string = ""
         loglog = ""
         let url = URL(fileURLWithPath: self.folderPath.stringValue)
         let manager = FileManager.default
@@ -79,61 +77,60 @@ class ViewController: NSViewController {
             errorInfo.stringValue = "No folder find"
             return
         }
+        let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true) as NSArray
         let patharr: Array = folderpath.components(separatedBy: "/")
-        finallogname = patharr[patharr.count - 1]
-        
-        print(finallogname)
+        let foldername = patharr.last!
         var enumeratorAtPath = manager.enumerator(atPath: url.path)
+        for logpath in enumeratorAtPath! {
+            if (logpath as! String).contains(".logarchive"){
+                self.run(cmd: "rm -rf \(folderpath)/\(logpath)")
+            }
+        }
+        print(paths[0])
+        self.run(cmd: "cp -R \(folderpath) \(paths[0])/new\(foldername)")
+        enumeratorAtPath = manager.enumerator(atPath: url.path)
+        let fileFlagArr:Array = [txtBtn.stringValue == "1" ? "txt" : "",logBtn.stringValue == "1" ? "log" : "",csvBtn.stringValue == "1" ? "csv" : "",plistBtn.stringValue == "1" ? "plist" : ""]
         DispatchQueue.global().async {
-//            self.resultDic.removeAll()
-//            self.tempDic.removeAll()
-            enumeratorAtPath = manager.enumerator(atPath: url.path)
             for logpath in enumeratorAtPath! {
                 let truepath = folderpath + "/\(logpath)"
-                let tmpData = NSData.init(contentsOfFile: truepath)
-                if (tmpData != nil) {
-                    let content = String.init(data: tmpData! as Data, encoding: String.Encoding.utf8)
-                    if (content != nil) {
-                        print(logpath)
-                        self.dealwithlog(log: content!, path: logpath as! String)
+                let newpath = "\(paths[0])/new\(foldername)/\(logpath)"
+                let logstylearr: Array = (logpath as! String).components(separatedBy: ".")
+                if logstylearr.count > 1 && fileFlagArr.contains(logstylearr.last!){
+                    let tmpData = NSData.init(contentsOfFile: truepath)
+                    if (tmpData != nil) {
+                        let content = String.init(data: tmpData! as Data, encoding: String.Encoding.utf8)
+                        if (content != nil) {
+                            var finallog = content!
+                            for eachRegex in self.datas{
+                                if eachRegex["find"] as! String == "0"{
+                                    finallog = self.replaceStringInString(str: finallog, pattern: eachRegex["regex"] as! String, replacewith: "")
+                                }else if eachRegex["find"] as! String == "1"{
+                                    finallog = self.findStringInString(str: finallog, pattern: eachRegex["regex"] as! String)
+                                }else{
+                                    self.errorInfo.stringValue = "Error config find format"
+                                }
+                            }
+                            do {
+                                try finallog.write(toFile: newpath, atomically: true, encoding: .utf8)
+                            } catch  {
+                                self.showmessage(inputString: "Error to write at \(newpath)")
+                            }
+                        }else{
+                            self.showmessage(inputString: "No string: \(logpath)")
+                            self.run(cmd: "rm -rf \(newpath)")
+                        }
                     }else{
-                        self.showmessage(inputString: "No string: \(logpath)")
+                        self.run(cmd: "rm -rf \(newpath)")
                     }
                 }else{
-                    //self.showmessage(inputString: "\n========================================\nFolder: \(logpath)")
+                    var isDir:ObjCBool = true
+                    manager.fileExists(atPath: truepath, isDirectory: &isDir)
+                    if !isDir.boolValue{
+                        //print("\(paths[0])/\(logpath)")
+                        self.run(cmd: "rm -rf \(newpath)")
+                    }
                 }
             }
-            //print(self.loglog)
-            let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true) as NSArray
-            let creatfile = "\(paths[0])/\(self.finallogname).txt"
-            print(creatfile)
-            do {
-                try self.loglog.write(toFile: creatfile, atomically: true, encoding: .utf8)
-            } catch  {
-                print("error")
-                //self.showmessage(inputString: "Error to write txt")
-            }
-            //print(self.loglog)
-        }
-    }
-    
-    func dealwithlog(log: String, path: String){
-        let patharr: Array = path.components(separatedBy: "/")
-        let logname = patharr[patharr.count - 1]
-        if !logname.contains(".plist") && log.count > 0 {
-            print(logname)
-            var finallog = log
-            for eachRegex in self.datas{
-                if eachRegex["find"] as! String == "0"{
-                    finallog = self.replaceStringInString(str: finallog, pattern: eachRegex["regex"] as! String, replacewith: "")
-                }else if eachRegex["find"] as! String == "1"{
-                    finallog = self.findStringInString(str: finallog, pattern: eachRegex["regex"] as! String)
-                }else{
-                    errorInfo.stringValue = "Error config find format"
-                }
-            }
-            loglog = "\(loglog)\n\n\(logname)\n\n\(finallog)"
-            print(loglog)
         }
     }
     
@@ -172,11 +169,18 @@ class ViewController: NSViewController {
     func showmessage(inputString: String) {
         DispatchQueue.main.async {
             if self.detailInfo.string == "" {
-                self.outputlogstr = inputString
-                self.detailInfo.string = self.outputlogstr
+                self.detailInfo.string = inputString
             }else{
-                self.outputlogstr = self.outputlogstr + "\n\(inputString)"
+                self.detailInfo.string = self.detailInfo.string + "\n\(inputString)"
             }
+        }
+    }
+    
+    func run(cmd:String) {
+        var error: NSDictionary?
+        NSAppleScript(source: "do shell script \"\(cmd)\"")!.executeAndReturnError(&error)
+        if error != nil {
+            showmessage(inputString: "\(String(describing: error))")
         }
     }
 }

@@ -995,7 +995,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="LeU-mT-ZsD"/>
                                 </constraints>
-                                <buttonCell key="cell" type="check" title=".csv" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PKG-G9-fP5">
+                                <buttonCell key="cell" type="check" title=".csv" bezelStyle="regularSquare" imagePosition="left" inset="2" id="PKG-G9-fP5">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1008,7 +1008,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="UwL-J9-5rk"/>
                                 </constraints>
-                                <buttonCell key="cell" type="check" title=".plist" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="agV-4P-D9r">
+                                <buttonCell key="cell" type="check" title=".plist" bezelStyle="regularSquare" imagePosition="left" inset="2" id="agV-4P-D9r">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1064,11 +1064,15 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="csvBtn" destination="ejg-QI-eEc" id="5Jf-gT-HJK"/>
                         <outlet property="detailInfo" destination="N2z-98-LUT" id="T7v-lE-ECI"/>
                         <outlet property="dragView" destination="m2S-Jp-Qdl" id="iaZ-pD-fZT"/>
                         <outlet property="errorInfo" destination="Olb-hM-GsC" id="P4t-HD-1tw"/>
                         <outlet property="folderPath" destination="2TD-iN-GwQ" id="ptz-nH-n2l"/>
+                        <outlet property="logBtn" destination="lSl-kl-0wp" id="m6v-7A-rc2"/>
+                        <outlet property="plistBtn" destination="2de-in-cJv" id="Ucf-F6-vji"/>
                         <outlet property="tableView" destination="s9C-4v-6Sv" id="bOM-51-dDt"/>
+                        <outlet property="txtBtn" destination="vew-G2-cH6" id="sLp-qh-CTN"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
