@@ -18,10 +18,11 @@ class ViewController: NSViewController {
     @IBOutlet weak var logBtn: NSButton!
     @IBOutlet weak var csvBtn: NSButton!
     @IBOutlet weak var plistBtn: NSButton!
-    
+    @IBOutlet weak var processbar: NSProgressIndicator!
+    @IBOutlet weak var processLabel: NSTextField!
+    @IBOutlet weak var exportBtn: NSButton!
     var file = ""
     var ConfigPlist = [String: Any]()
-    var loglog = ""
     var datas = [NSMutableDictionary]()
     
     override func viewDidLoad() {
@@ -61,15 +62,18 @@ class ViewController: NSViewController {
     }
     
     @IBAction func Refresh(_ sender: NSButton) {
+        self.datas = ConfigPlist["Regex"] as! [NSMutableDictionary]
+        self.tableView.reloadData()
     }
     
     @IBAction func Save(_ sender: NSButton) {
+        print(self.datas)
+        
     }
     
     @IBAction func Export(_ sender: NSButton) {
         errorInfo.stringValue = ""
         self.detailInfo.string = ""
-        loglog = ""
         let url = URL(fileURLWithPath: self.folderPath.stringValue)
         let manager = FileManager.default
         let folderpath =  "\(self.folderPath.stringValue)"
@@ -77,21 +81,49 @@ class ViewController: NSViewController {
             errorInfo.stringValue = "No folder find"
             return
         }
+        showProcessBar(isShow: true)
         let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true) as NSArray
         let patharr: Array = folderpath.components(separatedBy: "/")
         let foldername = patharr.last!
         var enumeratorAtPath = manager.enumerator(atPath: url.path)
+        var num = 0
+        var process = 0
         for logpath in enumeratorAtPath! {
             if (logpath as! String).contains(".logarchive"){
                 self.run(cmd: "rm -rf \(folderpath)/\(logpath)")
             }
         }
-        print(paths[0])
-        self.run(cmd: "cp -R \(folderpath) \(paths[0])/new\(foldername)")
+        enumeratorAtPath = manager.enumerator(atPath: url.path)
+        for _ in enumeratorAtPath! {
+            num = num + 1
+        }
+        showmessage(inputString: "File count : \(num)\n")
+        DispatchTimer(timeInterval: 1, handler: {(timer) in
+            if num > 1000{
+                let percent = Double(process)/Double(num)*100
+                print(percent)
+                if percent == 100{
+                    timer?.cancel()
+                }
+                if percent > 0 {
+                    self.processLabel.stringValue = String.init(format: "%.1f%%", percent)
+                    self.processbar.doubleValue = percent
+                }
+            }
+        })
         enumeratorAtPath = manager.enumerator(atPath: url.path)
         let fileFlagArr:Array = [txtBtn.stringValue == "1" ? "txt" : "",logBtn.stringValue == "1" ? "log" : "",csvBtn.stringValue == "1" ? "csv" : "",plistBtn.stringValue == "1" ? "plist" : ""]
         DispatchQueue.global().async {
+            let incrementnum = 100.0/Double(num)
+            self.run(cmd: "cp -R \(folderpath) \(paths[0])/new\(foldername)")
             for logpath in enumeratorAtPath! {
+                process = process + 1
+                if num < 1000{
+                    DispatchQueue.main.async {
+                        self.processLabel.stringValue = "\(process)/\(num)"
+                        self.processbar.increment(by: Double(incrementnum))
+                    }
+                }
                 let truepath = folderpath + "/\(logpath)"
                 let newpath = "\(paths[0])/new\(foldername)/\(logpath)"
                 let logstylearr: Array = (logpath as! String).components(separatedBy: ".")
@@ -130,6 +162,9 @@ class ViewController: NSViewController {
                         self.run(cmd: "rm -rf \(newpath)")
                     }
                 }
+            }
+            DispatchQueue.main.async {
+                self.showProcessBar(isShow: false)
             }
         }
     }
@@ -183,6 +218,31 @@ class ViewController: NSViewController {
             showmessage(inputString: "\(String(describing: error))")
         }
     }
+    
+    func DispatchTimer(timeInterval: Double, handler:@escaping (DispatchSourceTimer?)->())
+    {
+        let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+        timer.schedule(deadline: .now(), repeating: timeInterval)
+        timer.setEventHandler {
+            DispatchQueue.main.async {
+                handler(timer)
+            }
+        }
+        timer.resume()
+    }
+    
+    func showProcessBar(isShow:Bool) {
+        txtBtn.isHidden = isShow
+        logBtn.isHidden = isShow
+        csvBtn.isHidden = isShow
+        plistBtn.isHidden = isShow
+        exportBtn.isHidden = isShow
+        processbar.isHidden = !isShow
+        processLabel.isHidden = !isShow
+        if isShow {
+            processLabel.stringValue = "Loading..."
+        }
+    }
 }
 
 extension ViewController: NSTableViewDataSource {
@@ -192,34 +252,49 @@ extension ViewController: NSTableViewDataSource {
 }
 
 extension ViewController: NSTableViewDelegate {
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let data = self.datas[row]
-        let key = (tableColumn?.identifier)!
-        let value = data[key]
-        let view = tableView.makeView(withIdentifier: key, owner: self)
-        let subviews = view?.subviews
-        if (subviews?.count)!<=0 {
-            return nil
-        }
-        if key.rawValue == "regex" || key.rawValue == "ex"{
-            let textField = subviews?[0] as! NSTextField
-            if value != nil {
-                textField.stringValue = value as! String
-            }
-        }
-        if key.rawValue == "find" {
-            let comboField = subviews?[0] as! NSButton
-            if value != nil {
-                comboField.stringValue = value as! String
-            }
-        }
-        return view
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+        return self.datas[row].object(forKey:(tableColumn?.identifier)!)
+        //return [[StationArray objectAtIndex:row] objectForKey:[tableColumn identifier]];
     }
+//    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+//        let data = self.datas[row]
+//        let key = (tableColumn?.identifier)!
+//        let value = data[key]
+//        let view = tableView.makeView(withIdentifier: key, owner: self)
+//        let subviews = view?.subviews
+////        if (subviews?.count)!<=0 {
+////            return nil
+////        }
+//        if key.rawValue == "regex" || key.rawValue == "ex"{
+//            let textField = subviews?[0] as! NSTextField
+//            if value != nil {
+//                textField.stringValue = value as! String
+//            }
+//        }
+//        if key.rawValue == "find" {
+//            let comboField = subviews?[0] as! NSButton
+//            if value != nil {
+//                comboField.stringValue = value as! String
+//            }
+//        }
+//        return view
+//    }
     
     func tableViewSelectionDidChange(_ notification: Notification){
         let tableView = notification.object as! NSTableView
         let row = tableView.selectedRow
         print("selection row \(row)")
+    }
+    
+    func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
+        if (tableColumn?.identifier)!.rawValue == "find" {
+            if self.datas[row].object(forKey: "find") as! String == "1"{
+                self.datas[row].setObject("0", forKey: "find" as NSCopying)
+            }else{
+                self.datas[row].setObject("1", forKey: "find" as NSCopying)
+            }
+            tableView.reloadData()
+        }
     }
     
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {

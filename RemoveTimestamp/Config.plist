@@ -14,6 +14,14 @@
 		</dict>
 		<dict>
 			<key>find</key>
+			<string>1</string>
+			<key>ex</key>
+			<string>2017-12-08 18:29:37.352</string>
+			<key>regex</key>
+			<string>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{3}</string>
+		</dict>
+		<dict>
+			<key>find</key>
 			<string>0</string>
 			<key>ex</key>
 			<string>2017-09-13 23:15:39.762 GMT+8 [1234]: </string>
