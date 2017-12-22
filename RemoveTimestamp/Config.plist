@@ -8,13 +8,13 @@
 			<key>find</key>
 			<string>0</string>
 			<key>ex</key>
-			<string>2017/09/13 23:15:17.709972:</string>
+			<string>2017-09-13 23:15:39.762 GMT+8 [1to6]: </string>
 			<key>regex</key>
-			<string>\d{4}/\d{1,2}/\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{6}:</string>
+			<string>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{3} GMT\+8 \[\d{1,6}\]:</string>
 		</dict>
 		<dict>
 			<key>find</key>
-			<string>1</string>
+			<string>0</string>
 			<key>ex</key>
 			<string>2017-12-08 18:29:37.352</string>
 			<key>regex</key>
@@ -24,17 +24,9 @@
 			<key>find</key>
 			<string>0</string>
 			<key>ex</key>
-			<string>2017-09-13 23:15:39.762 GMT+8 [1234]: </string>
+			<string>2017/09/13 23:15:17.709972:</string>
 			<key>regex</key>
-			<string>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{3} GMT\+8 \[\d{4}\]:</string>
-		</dict>
-		<dict>
-			<key>find</key>
-			<string>0</string>
-			<key>ex</key>
-			<string>2017-09-13 23:15:39.762 GMT+8 [12345]: </string>
-			<key>regex</key>
-			<string>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{3} GMT\+8 \[\d{5}\]:</string>
+			<string>\d{4}/\d{1,2}/\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d{6}:</string>
 		</dict>
 		<dict>
 			<key>find</key>

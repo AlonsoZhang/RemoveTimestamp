@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E217308D1FE919FC009132C9 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = E217308C1FE919FC009132C9 /* Config.plist */; };
+		E283A1121FECB32800CF575B /* SW.html in Resources */ = {isa = PBXBuildFile; fileRef = E283A1111FECB32800CF575B /* SW.html */; };
+		E283A1141FECB35700CF575B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283A1131FECB35700CF575B /* WebViewController.swift */; };
 		E28CEE8F1FCCE7A90032F8B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CEE8E1FCCE7A90032F8B9 /* AppDelegate.swift */; };
 		E28CEE911FCCE7A90032F8B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CEE901FCCE7A90032F8B9 /* ViewController.swift */; };
 		E28CEE931FCCE7A90032F8B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E28CEE921FCCE7A90032F8B9 /* Assets.xcassets */; };
@@ -17,6 +19,8 @@
 
 /* Begin PBXFileReference section */
 		E217308C1FE919FC009132C9 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
+		E283A1111FECB32800CF575B /* SW.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SW.html; sourceTree = "<group>"; };
+		E283A1131FECB35700CF575B /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		E28CEE8B1FCCE7A90032F8B9 /* RemoveTimestamp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoveTimestamp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28CEE8E1FCCE7A90032F8B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E28CEE901FCCE7A90032F8B9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,9 +63,11 @@
 			children = (
 				E28CEE8E1FCCE7A90032F8B9 /* AppDelegate.swift */,
 				E28CEE901FCCE7A90032F8B9 /* ViewController.swift */,
+				E283A1131FECB35700CF575B /* WebViewController.swift */,
 				E28CEE9E1FCD12720032F8B9 /* FileDragView.swift */,
 				E28CEE921FCCE7A90032F8B9 /* Assets.xcassets */,
 				E28CEE941FCCE7A90032F8B9 /* Main.storyboard */,
+				E283A1111FECB32800CF575B /* SW.html */,
 				E28CEE971FCCE7A90032F8B9 /* Info.plist */,
 				E217308C1FE919FC009132C9 /* Config.plist */,
 				E28CEE981FCCE7A90032F8B9 /* RemoveTimestamp.entitlements */,
@@ -133,6 +139,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E283A1121FECB32800CF575B /* SW.html in Resources */,
 				E28CEE931FCCE7A90032F8B9 /* Assets.xcassets in Resources */,
 				E217308D1FE919FC009132C9 /* Config.plist in Resources */,
 				E28CEE961FCCE7A90032F8B9 /* Main.storyboard in Resources */,
@@ -149,6 +156,7 @@
 				E28CEE9F1FCD12720032F8B9 /* FileDragView.swift in Sources */,
 				E28CEE911FCCE7A90032F8B9 /* ViewController.swift in Sources */,
 				E28CEE8F1FCCE7A90032F8B9 /* AppDelegate.swift in Sources */,
+				E283A1141FECB35700CF575B /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -97,25 +97,55 @@ class ViewController: NSViewController {
         for _ in enumeratorAtPath! {
             num = num + 1
         }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddHHmmss"
+        let newfoldername = dateFormatter.string(from: Date())
+        let myfolder = "\(paths[0])/\(newfoldername)"
+        try! manager.createDirectory(atPath: myfolder,withIntermediateDirectories: true, attributes: nil)
         showmessage(inputString: "File count : \(num)\n")
+        var timenum = 0
         DispatchTimer(timeInterval: 1, handler: {(timer) in
             if num > 1000{
                 let percent = Double(process)/Double(num)*100
-                print(percent)
+                timenum = timenum + 1
                 if percent == 100{
+                    self.showmessage(inputString: "Total Time : \(timenum)s")
                     timer?.cancel()
                 }
                 if percent > 0 {
-                    self.processLabel.stringValue = String.init(format: "%.1f%%", percent)
+                    self.processLabel.stringValue = String.init(format: "%.0f%%", percent)
                     self.processbar.doubleValue = percent
                 }
             }
         })
         enumeratorAtPath = manager.enumerator(atPath: url.path)
         let fileFlagArr:Array = [txtBtn.stringValue == "1" ? "txt" : "",logBtn.stringValue == "1" ? "log" : "",csvBtn.stringValue == "1" ? "csv" : "",plistBtn.stringValue == "1" ? "plist" : ""]
+        var justfind = false
+        var regexstr = ""
+        for eachRegex in self.datas{
+            if eachRegex["find"] as! String == "1"{
+                justfind = true
+                if regexstr.count > 0{
+                    regexstr = "\(regexstr)|\(eachRegex["regex"] as! String)"
+                }else{
+                    regexstr = "\(eachRegex["regex"] as! String)"
+                }
+            }
+        }
+        if !justfind{
+            for eachRegex in self.datas{
+                if eachRegex["find"] as! String == "0"{
+                    if regexstr.count > 0{
+                        regexstr = "\(regexstr)|\(eachRegex["regex"] as! String)"
+                    }else{
+                        regexstr = "\(eachRegex["regex"] as! String)"
+                    }
+                }
+            }
+        }
         DispatchQueue.global().async {
             let incrementnum = 100.0/Double(num)
-            self.run(cmd: "cp -R \(folderpath) \(paths[0])/new\(foldername)")
+            self.run(cmd: "cp -R \(folderpath) \(paths[0])/\(newfoldername)")
             for logpath in enumeratorAtPath! {
                 process = process + 1
                 if num < 1000{
@@ -125,7 +155,7 @@ class ViewController: NSViewController {
                     }
                 }
                 let truepath = folderpath + "/\(logpath)"
-                let newpath = "\(paths[0])/new\(foldername)/\(logpath)"
+                let newpath = "\(paths[0])/\(newfoldername)/\(foldername)/\(logpath)"
                 let logstylearr: Array = (logpath as! String).components(separatedBy: ".")
                 if logstylearr.count > 1 && fileFlagArr.contains(logstylearr.last!){
                     let tmpData = NSData.init(contentsOfFile: truepath)
@@ -133,19 +163,19 @@ class ViewController: NSViewController {
                         let content = String.init(data: tmpData! as Data, encoding: String.Encoding.utf8)
                         if (content != nil) {
                             var finallog = content!
-                            for eachRegex in self.datas{
-                                if eachRegex["find"] as! String == "0"{
-                                    finallog = self.replaceStringInString(str: finallog, pattern: eachRegex["regex"] as! String, replacewith: "")
-                                }else if eachRegex["find"] as! String == "1"{
-                                    finallog = self.findStringInString(str: finallog, pattern: eachRegex["regex"] as! String)
-                                }else{
-                                    self.errorInfo.stringValue = "Error config find format"
-                                }
+                            if justfind{
+                                finallog = self.findArrayInString(str: finallog, pattern: regexstr).joined(separator: "\n")
+                            }else{
+                                finallog = self.replaceStringInString(str: finallog, pattern: regexstr, replacewith: "")
                             }
-                            do {
-                                try finallog.write(toFile: newpath, atomically: true, encoding: .utf8)
-                            } catch  {
-                                self.showmessage(inputString: "Error to write at \(newpath)")
+                            if finallog.count > 0{
+                                do {
+                                    try finallog.write(toFile: newpath, atomically: true, encoding: .utf8)
+                                } catch  {
+                                    self.showmessage(inputString: "Error to write at \(newpath)")
+                                }
+                            }else{
+                                self.run(cmd: "rm -rf \(newpath)")
                             }
                         }else{
                             self.showmessage(inputString: "No string: \(logpath)")
@@ -158,7 +188,6 @@ class ViewController: NSViewController {
                     var isDir:ObjCBool = true
                     manager.fileExists(atPath: truepath, isDirectory: &isDir)
                     if !isDir.boolValue{
-                        //print("\(paths[0])/\(logpath)")
                         self.run(cmd: "rm -rf \(newpath)")
                     }
                 }
@@ -166,6 +195,26 @@ class ViewController: NSViewController {
             DispatchQueue.main.async {
                 self.showProcessBar(isShow: false)
             }
+        }
+    }
+    
+    func findArrayInString(str:String , pattern:String ) -> [String]
+    {
+        do {
+            var stringArray = [String]();
+            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
+            let res = regex.matches(in: str, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, str.count))
+            for checkingRes in res
+            {
+                let tmp = (str as NSString).substring(with: checkingRes.range)
+                stringArray.append(tmp.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
+            }
+            return stringArray
+        }
+        catch
+        {
+            showmessage(inputString: "findArrayInString Regex error")
+            return [String]()
         }
     }
     
@@ -254,37 +303,13 @@ extension ViewController: NSTableViewDataSource {
 extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         return self.datas[row].object(forKey:(tableColumn?.identifier)!)
-        //return [[StationArray objectAtIndex:row] objectForKey:[tableColumn identifier]];
     }
-//    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-//        let data = self.datas[row]
-//        let key = (tableColumn?.identifier)!
-//        let value = data[key]
-//        let view = tableView.makeView(withIdentifier: key, owner: self)
-//        let subviews = view?.subviews
-////        if (subviews?.count)!<=0 {
-////            return nil
-////        }
-//        if key.rawValue == "regex" || key.rawValue == "ex"{
-//            let textField = subviews?[0] as! NSTextField
-//            if value != nil {
-//                textField.stringValue = value as! String
-//            }
-//        }
-//        if key.rawValue == "find" {
-//            let comboField = subviews?[0] as! NSButton
-//            if value != nil {
-//                comboField.stringValue = value as! String
-//            }
-//        }
-//        return view
-//    }
     
-    func tableViewSelectionDidChange(_ notification: Notification){
-        let tableView = notification.object as! NSTableView
-        let row = tableView.selectedRow
-        print("selection row \(row)")
-    }
+//    func tableViewSelectionDidChange(_ notification: Notification){
+//        let tableView = notification.object as! NSTableView
+//        let row = tableView.selectedRow
+//        print("selection row \(row)")
+//    }
     
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         if (tableColumn?.identifier)!.rawValue == "find" {
@@ -297,15 +322,15 @@ extension ViewController: NSTableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        guard let rowView = tableView.makeView(withIdentifier:NSUserInterfaceItemIdentifier(rawValue: "RowView"), owner: nil) as! NSTableRowView?
-            else {
-            let rowView = NSTableRowView()
-            rowView.identifier = NSUserInterfaceItemIdentifier(rawValue: "RowView")
-            return rowView
-        }
-        return rowView
-    }
+//    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
+//        guard let rowView = tableView.makeView(withIdentifier:NSUserInterfaceItemIdentifier(rawValue: "RowView"), owner: nil) as! NSTableRowView?
+//            else {
+//            let rowView = NSTableRowView()
+//            rowView.identifier = NSUserInterfaceItemIdentifier(rawValue: "RowView")
+//            return rowView
+//        }
+//        return rowView
+//    }
 }
 
 extension ViewController: FileDragDelegate {

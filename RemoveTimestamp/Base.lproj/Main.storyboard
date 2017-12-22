@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -684,7 +685,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Remove Time Stamp" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="1000" height="300"/>
@@ -723,23 +724,23 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TD-iN-GwQ">
-                                <rect key="frame" x="101" y="263" width="881" height="17"/>
+                                <rect key="frame" x="101" y="263" width="851" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" alignment="left" placeholderString="Please drag folder to here" id="EsH-fe-fJa">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sln-IP-Aff">
+                            <scrollView autohidesScrollers="YES" horizontalLineScroll="25" horizontalPageScroll="10" verticalLineScroll="25" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sln-IP-Aff">
                                 <rect key="frame" x="20" y="55" width="750" height="188"/>
                                 <clipView key="contentView" id="5rR-Y3-qG1">
                                     <rect key="frame" x="1" y="0.0" width="748" height="187"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="hpN-Te-XLC" id="s9C-4v-6Sv">
-                                            <rect key="frame" x="0.0" y="0.0" width="765" height="164"/>
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" headerView="hpN-Te-XLC" id="s9C-4v-6Sv">
+                                            <rect key="frame" x="0.0" y="0.0" width="755" height="164"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <size key="intercellSpacing" width="3" height="2"/>
+                                            <size key="intercellSpacing" width="3" height="5"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <tableViewGridLines key="gridStyleMask" vertical="YES" dashed="YES"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -756,7 +757,7 @@
                                                     </buttonCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn identifier="ex" width="280" minWidth="280" maxWidth="500" id="aSj-9a-jVV">
+                                                <tableColumn identifier="ex" width="270" minWidth="270" maxWidth="500" id="aSj-9a-jVV">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="示例">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -799,7 +800,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" id="hpN-Te-XLC">
-                                    <rect key="frame" x="0.0" y="0.0" width="765" height="23"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="755" height="23"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
@@ -972,13 +973,25 @@
                             <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="dUH-aT-PxO">
                                 <rect key="frame" x="522" y="7" width="458" height="20"/>
                             </progressIndicator>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ygc-6Q-cYi">
+                                <rect key="frame" x="957" y="256" width="25" height="25"/>
+                                <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xtR-iF-a1m">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <segue destination="wcc-6L-aNz" kind="popover" popoverAnchorView="Ygc-6Q-cYi" popoverBehavior="t" preferredEdge="minX" id="PVw-iy-3NY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="9HK-ro-Q5A" firstAttribute="top" secondItem="Sln-IP-Aff" secondAttribute="bottom" constant="8" id="19E-fS-U0f"/>
                             <constraint firstItem="LSi-3X-ght" firstAttribute="leading" secondItem="Sln-IP-Aff" secondAttribute="trailing" constant="10" id="1Js-MM-ZT8"/>
+                            <constraint firstItem="Ygc-6Q-cYi" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="1XD-ZV-BkR"/>
                             <constraint firstItem="LSi-3X-ght" firstAttribute="top" secondItem="2TD-iN-GwQ" secondAttribute="bottom" constant="20" id="1Zw-X1-gAN"/>
                             <constraint firstItem="vew-G2-cH6" firstAttribute="centerY" secondItem="Jmo-xb-o0a" secondAttribute="centerY" id="4ql-6z-Evu"/>
                             <constraint firstItem="Jmo-xb-o0a" firstAttribute="centerY" secondItem="5HH-MH-bKf" secondAttribute="centerY" id="5GC-GW-WdD"/>
+                            <constraint firstAttribute="trailing" secondItem="2TD-iN-GwQ" secondAttribute="trailing" constant="50" id="5qS-VG-qbs"/>
                             <constraint firstItem="bbg-Pj-jwh" firstAttribute="leading" secondItem="der-15-b6x" secondAttribute="trailing" constant="10" id="7IU-wV-AA7"/>
                             <constraint firstItem="2de-in-cJv" firstAttribute="leading" secondItem="ejg-QI-eEc" secondAttribute="trailing" constant="20" id="7pY-CH-4ed"/>
                             <constraint firstItem="lSl-kl-0wp" firstAttribute="centerY" secondItem="vew-G2-cH6" secondAttribute="centerY" id="8tb-uF-2Cj"/>
@@ -988,6 +1001,7 @@
                             <constraint firstItem="dUH-aT-PxO" firstAttribute="leading" secondItem="Olb-hM-GsC" secondAttribute="trailing" id="DdX-0a-fh5"/>
                             <constraint firstItem="der-15-b6x" firstAttribute="top" secondItem="Sln-IP-Aff" secondAttribute="bottom" constant="10" id="Fj8-ga-C1x"/>
                             <constraint firstItem="9HK-ro-Q5A" firstAttribute="leading" secondItem="Olb-hM-GsC" secondAttribute="trailing" id="GoX-os-29H"/>
+                            <constraint firstItem="Ygc-6Q-cYi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="IeO-84-AKk"/>
                             <constraint firstAttribute="bottom" secondItem="Olb-hM-GsC" secondAttribute="bottom" constant="15" id="J4O-Dt-hY7"/>
                             <constraint firstItem="V3v-Tt-gJ2" firstAttribute="leading" secondItem="2de-in-cJv" secondAttribute="trailing" constant="20" id="JjL-Y3-kcj"/>
                             <constraint firstItem="Olb-hM-GsC" firstAttribute="top" secondItem="Sln-IP-Aff" secondAttribute="bottom" constant="10" id="Lzx-V3-dqd"/>
@@ -1004,6 +1018,7 @@
                             <constraint firstItem="vew-G2-cH6" firstAttribute="leading" secondItem="Olb-hM-GsC" secondAttribute="trailing" constant="10" id="ecD-SZ-v5f"/>
                             <constraint firstItem="lSl-kl-0wp" firstAttribute="leading" secondItem="vew-G2-cH6" secondAttribute="trailing" constant="20" id="fl7-KN-2rP"/>
                             <constraint firstAttribute="bottom" secondItem="9HK-ro-Q5A" secondAttribute="bottom" constant="20" id="gRQ-GF-bjE"/>
+                            <constraint firstAttribute="trailing" secondItem="Ygc-6Q-cYi" secondAttribute="trailing" constant="20" id="gVk-hf-peQ"/>
                             <constraint firstItem="2de-in-cJv" firstAttribute="centerY" secondItem="ejg-QI-eEc" secondAttribute="centerY" id="j7i-I1-5Yw"/>
                             <constraint firstAttribute="trailing" secondItem="9HK-ro-Q5A" secondAttribute="trailing" constant="20" id="lHD-mL-zLn"/>
                             <constraint firstItem="der-15-b6x" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="lHf-0K-aq9"/>
@@ -1011,7 +1026,6 @@
                             <constraint firstItem="hdR-Kx-uy9" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="oFK-Qz-gHy"/>
                             <constraint firstItem="ejg-QI-eEc" firstAttribute="centerY" secondItem="lSl-kl-0wp" secondAttribute="centerY" id="p0b-FK-3ax"/>
                             <constraint firstAttribute="bottom" secondItem="der-15-b6x" secondAttribute="bottom" constant="15" id="ph1-rs-kbf"/>
-                            <constraint firstAttribute="trailing" secondItem="2TD-iN-GwQ" secondAttribute="trailing" constant="20" id="t2T-DO-G9c"/>
                             <constraint firstAttribute="trailing" secondItem="V3v-Tt-gJ2" secondAttribute="trailing" constant="20" id="vGd-wE-FDe"/>
                             <constraint firstItem="Olb-hM-GsC" firstAttribute="leading" secondItem="Jmo-xb-o0a" secondAttribute="trailing" constant="10" id="vZN-gh-JaH"/>
                             <constraint firstItem="5HH-MH-bKf" firstAttribute="leading" secondItem="bbg-Pj-jwh" secondAttribute="trailing" constant="10" id="xA4-dr-c6u"/>
@@ -1036,6 +1050,37 @@
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="758"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="Che-BZ-WKL">
+            <objects>
+                <viewController id="wcc-6L-aNz" customClass="WebViewController" customModule="RemoveTimestamp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="B85-nd-as4">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hJA-XE-sJs">
+                                <rect key="frame" x="20" y="20" width="360" height="360"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hJA-XE-sJs" firstAttribute="top" secondItem="B85-nd-as4" secondAttribute="top" constant="20" id="RJb-e4-y3D"/>
+                            <constraint firstItem="hJA-XE-sJs" firstAttribute="leading" secondItem="B85-nd-as4" secondAttribute="leading" constant="20" id="WeQ-80-Bdy"/>
+                            <constraint firstAttribute="trailing" secondItem="hJA-XE-sJs" secondAttribute="trailing" constant="20" id="yDe-fB-3MV"/>
+                            <constraint firstAttribute="bottom" secondItem="hJA-XE-sJs" secondAttribute="bottom" constant="20" id="yTy-79-kGp"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="helpWeb" destination="hJA-XE-sJs" id="a1p-FX-KDU"/>
+                    </connections>
+                </viewController>
+                <customObject id="Yfe-Q0-SWR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="890" y="758"/>
         </scene>
     </scenes>
     <resources>
