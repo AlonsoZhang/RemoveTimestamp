@@ -67,8 +67,9 @@ class ViewController: NSViewController {
     }
     
     @IBAction func Save(_ sender: NSButton) {
-        print(self.datas)
-        
+        ConfigPlist["Regex"] = self.datas
+        NSDictionary(dictionary: ConfigPlist).write(toFile: file, atomically: true)
+        showmessage(inputString: "Save successful\n")
     }
     
     @IBAction func Export(_ sender: NSButton) {
@@ -79,6 +80,12 @@ class ViewController: NSViewController {
         let folderpath =  "\(self.folderPath.stringValue)"
         if folderpath.count == 0 {
             errorInfo.stringValue = "No folder find"
+            return
+        }
+        var isDir:ObjCBool = true
+        manager.fileExists(atPath: folderpath, isDirectory: &isDir)
+        if !isDir.boolValue{
+            errorInfo.stringValue = "Please drag folder instead of file"
             return
         }
         showProcessBar(isShow: true)

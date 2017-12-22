@@ -14,7 +14,7 @@ class WebViewController: NSViewController,WKUIDelegate {
     
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
-        let rect = CGRect(x: 0, y: 0, width: 350, height: 350)
+        let rect = CGRect(x: 0, y: 0, width: 300, height: 300)
         helpWeb = WKWebView(frame: rect, configuration: webConfiguration)
         helpWeb.uiDelegate = self
         view = helpWeb
